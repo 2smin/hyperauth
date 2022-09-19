@@ -1,4 +1,4 @@
-from quay.io/keycloak/keycloak:11.0.2
+from quay.io/keycloak/hyperauth:11.0.2
  
 LABEL maintainer="taegeon_woo@tmax.co.kr"
 

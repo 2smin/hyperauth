@@ -36,6 +36,27 @@
             </column>
         </createTable>
 
+        <createTable tableName="USER_PROFILE">
+            <column name="ID" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEX" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AGE" type="INT(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PHONE_NUMBER" type="VARCHAR(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
         <addPrimaryKey
                 constraintName="PK_CLIENT_AGREEMENT"
                 tableName="CLIENT_AGREEMENT"
@@ -44,6 +65,12 @@
         <addPrimaryKey
                 constraintName="PK_EMAIL_VERIFICATION"
                 tableName="EMAIL_VERIFICATION"
+                columnNames="ID"
+        />
+
+        <addPrimaryKey
+                constraintName="PK_USER_PROFILE"
+                tableName="USER_PROFILE"
                 columnNames="ID"
         />
 

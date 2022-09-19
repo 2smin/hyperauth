@@ -39,6 +39,10 @@ public class UserProfile {
         return sex;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
     public void setAge(String age) {
         this.age = age;
     }
@@ -57,6 +61,10 @@ public class UserProfile {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

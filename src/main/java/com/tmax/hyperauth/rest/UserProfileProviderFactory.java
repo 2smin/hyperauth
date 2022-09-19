@@ -10,7 +10,7 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 public class UserProfileProviderFactory implements RealmResourceProviderFactory {
 
     // unique identifier (administration page)
-    private static String ID = "userProfile";
+    private static String ID = "profile";
 
     @Override
     public String getId(){

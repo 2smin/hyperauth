@@ -11,3 +11,4 @@ com.tmax.hyperauth.rest.VersionProviderFactory
 com.tmax.hyperauth.rest.PictureProviderFactory
 com.tmax.hyperauth.rest.Outer2ndFactorProviderFactory
 com.tmax.hyperauth.eventlistener.prometheus.MetricsEndpointFactory
+com.tmax.hyperauth.rest.UserProfileProviderFactory

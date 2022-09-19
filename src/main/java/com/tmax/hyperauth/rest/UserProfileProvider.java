@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Slf4j
 public class UserProfileProvider implements RealmResourceProvider {
@@ -47,11 +48,18 @@ public class UserProfileProvider implements RealmResourceProvider {
     Response.Status status;
     String out;
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("test")
+    public Response test() {
+        return Response.ok("hello").build();
+    }
+
     //1. admin이 직접 하는 기능으로 해보자
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{userName}/profile")
-    public Response getProfile(@PathParam("userName")  final String userName) {
+    @Path("{userName}")
+    public Response get(@PathParam("userName")  final String userName) {
 
         log.info("invoke user profile: " + userName);
 
@@ -77,8 +85,8 @@ public class UserProfileProvider implements RealmResourceProvider {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("{userName}/profile")
-    public Response setProfile(@PathParam("userName") final String username,
+    @Path("{userName}")
+    public Response set(@PathParam("userName") final String username,
                                UserProfile userProfile){
 
         log.info("userName: " + username);
