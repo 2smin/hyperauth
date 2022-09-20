@@ -64,20 +64,24 @@ public class UserProfileProvider implements RealmResourceProvider {
         log.info("invoke user profile: " + userName);
 
         RealmModel realm = session.getContext().getRealm();
+        log.info("realmmodel: " + realm.toString());
         String realmName = realm.getName();
         if (realmName == null) {
             realmName = realm.getName();
         }
 
-        UserModel user = session.users().getUserByUsername(userName, session.realms().getRealmByName(realmName));
-        StringBuilder query;
-        query = new StringBuilder("select * from USER_PROFILE where user_id = '" + user.getId() + "'");
+        log.info("realmName: " + realmName);
 
-        Object singleResultOb = getEntityManager().createQuery(query.toString()).getSingleResult();
-        UserProfileModel userProfileModel = (UserProfileModel) singleResultOb;
+        UserModel user = session.users().getUserByUsername(userName, session.realms().getRealmByName(realmName));
+//        StringBuilder query;
+//        String sql = new StringBuilder("select m from USER_PROFILE as m where m.user_id = '" + user.getId() + "'").toString();
+
+        Object userProfile = getEntityManager().createNamedQuery("findByUserId",UserProfile.class).setParameter("userId",user.getId()).getSingleResult();
+
+        log.info("user Profile: " + userProfile.toString());
 
         status = Response.Status.OK;
-        out = userProfileModel.toString();
+        out = userProfile.toString();
 
         return Util.setCors(status, out);
     }

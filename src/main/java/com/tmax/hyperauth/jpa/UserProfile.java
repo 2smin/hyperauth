@@ -1,14 +1,12 @@
 package com.tmax.hyperauth.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 
 @Entity
 @Table(name = "USER_PROFILE")
+@NamedQueries({ @NamedQuery(name = "findByUserId", query = "select m from UserProfile m where m.userId = :userId")})
 public class UserProfile {
 
     @Id
