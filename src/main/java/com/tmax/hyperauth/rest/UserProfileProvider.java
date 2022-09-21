@@ -73,11 +73,11 @@ public class UserProfileProvider implements RealmResourceProvider {
         log.info("realmName: " + realmName);
 
         UserModel user = session.users().getUserByUsername(userName, session.realms().getRealmByName(realmName));
-//        StringBuilder query;
+        StringBuilder query;
 //        String sql = new StringBuilder("select m from USER_PROFILE as m where m.user_id = '" + user.getId() + "'").toString();
 
-        Object userProfile = getEntityManager().createNamedQuery("findByUserId",UserProfile.class).setParameter("userId",user.getId()).getSingleResult();
-
+        UserProfile userProfile = getEntityManager().createNamedQuery("findByUserId",UserProfile.class).setParameter("userId",user.getId()).getSingleResult();
+//        Object userProfile = getEntityManager().createQuery(sql).setParameter("userId",user.getId()).getSingleResult();
         log.info("user Profile: " + userProfile.toString());
 
         status = Response.Status.OK;
