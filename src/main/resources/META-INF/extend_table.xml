@@ -80,6 +80,12 @@
 
     </changeSet>
 
+    <changeSet author="seongmin_lee2@tmax.co.kr" id="example-sql" context="migrate">
+        <sql dbms="postgresql">
+            ALTER TABLE USER_PROFILE RENAME COLUMN USER_ID TO EMAIL
+        </sql>
+    </changeSet>
+
 <!--    <changeSet author="taegeon_woo@tmax.co.kr" id="profile-picture-2.0">-->
 <!--        <createTable tableName="USER_PICTURE">-->
 <!--            <column name="ID" type="VARCHAR(36)">-->

@@ -1,5 +1,6 @@
 package com.tmax.hyperauth.rest;
 
+import com.tmax.hyperauth.jpa.Agreement;
 import com.tmax.hyperauth.jpa.UserProfile;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -12,12 +13,16 @@ import org.keycloak.models.UserModel;
 import org.keycloak.services.resource.RealmResourceProvider;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.Null;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -50,34 +55,22 @@ public class UserProfileProvider implements RealmResourceProvider {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("test")
-    public Response test() {
-        return Response.ok("hello").build();
-    }
-
-    //1. admin이 직접 하는 기능으로 해보자
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("{userName}")
     public Response get(@PathParam("userName")  final String userName) {
 
         log.info("invoke user profile: " + userName);
 
         RealmModel realm = session.getContext().getRealm();
-        log.info("realmmodel: " + realm.toString());
+
         String realmName = realm.getName();
         if (realmName == null) {
             realmName = realm.getName();
         }
 
-        log.info("realmName: " + realmName);
-
         UserModel user = session.users().getUserByUsername(userName, session.realms().getRealmByName(realmName));
-        StringBuilder query;
-//        String sql = new StringBuilder("select m from USER_PROFILE as m where m.user_id = '" + user.getId() + "'").toString();
 
-        UserProfile userProfile = getEntityManager().createNamedQuery("findByUserId",UserProfile.class).setParameter("userId",user.getId()).getSingleResult();
-//        Object userProfile = getEntityManager().createQuery(sql).setParameter("userId",user.getId()).getSingleResult();
+        log.info("user ID: " + user.getId());
+        UserProfile userProfile = getEntityManager().createNamedQuery("findByUserId",UserProfile.class).setParameter("id",user.getId()).getSingleResult();
         log.info("user Profile: " + userProfile.toString());
 
         status = Response.Status.OK;
@@ -89,23 +82,65 @@ public class UserProfileProvider implements RealmResourceProvider {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("{userName}")
-    public Response set(@PathParam("userName") final String username,
-                               UserProfile userProfile){
+    @Path("{userEmail}")
+    public Response update(@PathParam("userEmail") final String userEmail,
+                           @QueryParam("age") int age,
+                           @QueryParam("sex") String sex,
+                           @QueryParam("phoneNumber") String phoneNumber,
+                           @QueryParam("c") String job){
 
-        log.info("userName: " + username);
-        log.info(userProfile.toString());
+        log.info("update user profile: " + userEmail);
+
+        RealmModel realm = session.getContext().getRealm();
+
+        String realmName = realm.getName();
+        if (realmName == null) {realmName = realm.getName();}
 
 
-        try{
+        //1. 유저 프로필이 있으면 저장
+        UserModel user = null;
+
+        try {
+            user = session.users().getUserByUsername(userEmail, session.realms().getRealmByName(realmName));
+            getEntityManager().createNamedQuery("findByUserId", UserProfile.class).setParameter("id", user.getId()).getSingleResult();
+
+            //있는 유저면 update문으로 실행.
+            getEntityManager().createNamedQuery("updateUserProfile")
+                    .setParameter("id", user.getId())
+                    .setParameter("age", age)
+                    .setParameter("sex", sex)
+                    .setParameter("phoneNumber", phoneNumber)
+                    .setParameter("job", job)
+                    .executeUpdate();
+            status = Response.Status.OK;
+            out = "user profile updated";
+
+        }catch (NullPointerException e){
+            log.error("Cannot find User: " + userEmail);
+            status = Response.Status.BAD_REQUEST;
+            out = "Cannot find user: " + userEmail;
+        }catch (NoResultException e){
+
+            //없는 유저면 insert를 실행한다.
+            UserProfile userProfile = new UserProfile();
+                userProfile.setId(user.getId());
+                userProfile.setEmail(userEmail);
+                userProfile.setAge(age);
+                userProfile.setSex(sex);
+            userProfile.setPhoneNumber(phoneNumber);
+            userProfile.setJob(job);
+
             getEntityManager().persist(userProfile);
             status = Response.Status.OK;
-            out = "Profile Updated";
-        } catch (Exception e){
-            log.error("error occured while persisting userProfile");
+            out = "user profile saved";
+
+        }catch (Exception e){
+            log.error("error occured while executing update sql");
+            e.printStackTrace();
             status = Response.Status.INTERNAL_SERVER_ERROR;
-            out = "Error occured while update userProfile";
+            out = "error occured...";
         }
+
 
         return Util.setCors(status, out);
     }

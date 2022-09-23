@@ -1,27 +1,36 @@
 package com.tmax.hyperauth.jpa;
 
-import javax.persistence.*;
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import javax.transaction.Transactional;
+import java.util.Objects;
 
 @Entity(name = "USER_PROFILE")
 @Table(name = "USER_PROFILE")
-@NamedQueries({ @NamedQuery(name = "findByUserId", query = "select m from USER_PROFILE m where m.userId = :userId")})
+@NamedQueries({ @NamedQuery(name = "findByUserId", query = "select m from USER_PROFILE m where m.id = :id"),
+        @NamedQuery(name = "updateUserProfile", query = "update USER_PROFILE set age = :age, sex = :sex, phoneNumber = :phoneNumber, job = :job where id = :id")})
 public class UserProfile {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     private String id;
-
-    private String userId;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "sex")
     private String sex;
-    private String age;
+    @Column(name = "age")
+    private int age;
+    @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "job")
     private String job;
 
     public String getId(){return id;}
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
@@ -37,11 +46,11 @@ public class UserProfile {
         return sex;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -61,15 +70,15 @@ public class UserProfile {
         this.sex = sex;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
     public String toString() {
         return "UserProfile{" +
                 "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
+                ", userId='" + email + '\'' +
                 ", sex='" + sex + '\'' +
                 ", age='" + age + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -82,11 +91,11 @@ public class UserProfile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserProfile that = (UserProfile) o;
-        return Objects.equals(id, that.id) && Objects.equals(userId, that.userId) && Objects.equals(sex, that.sex) && Objects.equals(age, that.age) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(job, that.job);
+        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(sex, that.sex) && Objects.equals(age, that.age) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(job, that.job);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, sex, age, phoneNumber, job);
+        return Objects.hash(id, email, sex, age, phoneNumber, job);
     }
 }
