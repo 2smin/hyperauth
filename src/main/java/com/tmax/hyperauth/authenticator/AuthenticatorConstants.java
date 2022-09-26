@@ -49,4 +49,7 @@ public class AuthenticatorConstants {
     public static final String ATTR_PRP_OUTER_URL = "outerUrl";
     public static final String ATTR_PRP_OUTER_WAIT_TTL = "outerAuthWaitTtl";
     public static final String ATTR_PRP_OUTER_EXP_AT = "outerAuthExpAt";
+
+    //For Test
+    public static final String PHONE_NUM_CHECK = "phoneNumberCheck";
 }

@@ -1,5 +1,6 @@
 package com.tmax.hyperauth.rest;
 
+import com.tmax.hyperauth.caller.StringUtil;
 import com.tmax.hyperauth.jpa.Agreement;
 import com.tmax.hyperauth.jpa.UserProfile;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import javax.validation.constraints.Null;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -56,16 +58,24 @@ public class UserProfileProvider implements RealmResourceProvider {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{userName}")
-    public Response get(@PathParam("userName")  final String userName) {
+    public Response get(@HeaderParam("Authorization") String authorization,
+                        @PathParam("userName")  final String userName) {
+
+//        boolean flag = isPermitted(authorization);
+//
+//        if(!flag){
+//            status = Response.Status.UNAUTHORIZED;
+//            out = "Not Permitted";
+//            return Util.setCors(status, out);
+//        }
+
 
         log.info("invoke user profile: " + userName);
 
-        RealmModel realm = session.getContext().getRealm();
 
+        RealmModel realm = session.getContext().getRealm();
         String realmName = realm.getName();
-        if (realmName == null) {
-            realmName = realm.getName();
-        }
+        if (realmName == null) {realmName = realm.getName();}
 
         UserModel user = session.users().getUserByUsername(userName, session.realms().getRealmByName(realmName));
 
@@ -83,16 +93,23 @@ public class UserProfileProvider implements RealmResourceProvider {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{userEmail}")
-    public Response update(@PathParam("userEmail") final String userEmail,
+    public Response update(@HeaderParam("Authorization") String authorization,
+                           @PathParam("userEmail") final String userEmail,
                            @QueryParam("age") int age,
                            @QueryParam("sex") String sex,
                            @QueryParam("phoneNumber") String phoneNumber,
-                           @QueryParam("c") String job){
+                           @QueryParam("job") String job){
+
+//        boolean flag = isPermitted(authorization);
+//        if(!flag){
+//            status = Response.Status.UNAUTHORIZED;
+//            out = "Not Permitted";
+//            return Util.setCors(status, out);
+//        }
 
         log.info("update user profile: " + userEmail);
 
         RealmModel realm = session.getContext().getRealm();
-
         String realmName = realm.getName();
         if (realmName == null) {realmName = realm.getName();}
 
@@ -143,6 +160,17 @@ public class UserProfileProvider implements RealmResourceProvider {
 
 
         return Util.setCors(status, out);
+    }
+
+    public boolean isPermitted(String authorization){
+
+        if(StringUtil.isEmpty(authorization)){return false;}
+
+        String tokenString = authorization.split("Bearer ")[1];
+
+        if(!Util.isHyperauthAdmin(session,tokenString)){return false;}
+
+        return true;
     }
 
 }
