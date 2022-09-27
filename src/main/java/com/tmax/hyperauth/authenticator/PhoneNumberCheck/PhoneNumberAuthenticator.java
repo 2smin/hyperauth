@@ -45,6 +45,7 @@ public class PhoneNumberAuthenticator implements Authenticator {
                 throw new NoResultException();
             }
 
+            context.success();
 
         }catch (NoResultException e){
             log.error("user phoneNumber not set");
@@ -53,12 +54,11 @@ public class PhoneNumberAuthenticator implements Authenticator {
             context.challenge(challenge);
         }
 
-        context.success();
     }
 
     @Override
     public void action(AuthenticationFlowContext context){
-        //따로 넣을 로직이 없다....
+        //phoneNumber 입력받도록 추가
         log.info("phoneNumber check action success");
         context.success();
     }

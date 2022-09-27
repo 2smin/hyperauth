@@ -84,9 +84,8 @@ public class UserProfileProvider implements RealmResourceProvider {
         log.info("user Profile: " + userProfile.toString());
 
         status = Response.Status.OK;
-        out = userProfile.toString();
 
-        return Util.setCors(status, out);
+        return Util.setCors(status, userProfile);
     }
 
 
