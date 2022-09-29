@@ -86,6 +86,21 @@
         </sql>
     </changeSet>
 
+    <changeSet author="seongmin_lee2@tmax.co.kr" id="change_user_profile" context="migrate">
+        <sql dbms="postgresql">
+            ALTER TABLE USER_PROFILE ADD CONSTRAINT fk_userId foreign key (id) references user_entity(id)
+        </sql>
+        <sql dbms="postgresql">
+            alter table user_profile alter column phone_number drop not null
+        </sql>
+        <sql dbms="postgresql">
+            alter table user_profile alter column sex drop not null
+        </sql>
+        <sql dbms="postgresql">
+            alter table user_profile alter column age drop not null
+        </sql>
+    </changeSet>
+
 <!--    <changeSet author="taegeon_woo@tmax.co.kr" id="profile-picture-2.0">-->
 <!--        <createTable tableName="USER_PICTURE">-->
 <!--            <column name="ID" type="VARCHAR(36)">-->

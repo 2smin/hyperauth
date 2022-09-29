@@ -11,7 +11,8 @@ import java.util.Objects;
 @Entity(name = "USER_PROFILE")
 @Table(name = "USER_PROFILE")
 @NamedQueries({ @NamedQuery(name = "findByUserId", query = "select m from USER_PROFILE m where m.id = :id"),
-        @NamedQuery(name = "updateUserProfile", query = "update USER_PROFILE set age = :age, sex = :sex, phoneNumber = :phoneNumber, job = :job where id = :id")})
+        @NamedQuery(name = "updateUserProfile", query = "update USER_PROFILE set age = :age, sex = :sex, phoneNumber = :phoneNumber, job = :job where id = :id"),
+        @NamedQuery(name = "updatePhoneNumber", query = "update USER_PROFILE set phoneNumber = :phoneNumber where id = :id")})
 public class UserProfile {
 
     @Id

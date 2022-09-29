@@ -9,10 +9,10 @@
             <form id="phone-number-update-form" action="${url.loginAction}" method="post">
                 <div class="${properties.kcFormGroupClass!} marginTop">
                     <div class="${properties.kcLabelWrapperClass!}">
-                        <label for="phone-number" class="${properties.kcLabelClass!}">Submit your phone number</label>
+                        <label for="phone_number" class="${properties.kcLabelClass!}">Submit your phone number</label>
                     </div>
                     <div class="${properties.kcInputWrapperClass!} marginBottom">
-                        <input type="text" id="phone-number" name="phone-number" class="${properties.kcInputClass!}<#if message?has_content> has-${message.type}</#if>" autofocus onkeyup="removeError(this)"/>
+                        <input type="text" id="phone_number" name="phone_number" class="${properties.kcInputClass!}<#if message?has_content> has-${message.type}</#if>" autofocus onkeyup="removeError(this)"/>
                         <div>
                             <#if message?has_content && (message.type != 'warning')>
                                 <div class="alert alert-${message.type}">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="${properties.kcFormGroupClass!}">
                     <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
-                        <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" id="login-question" type="submit" />
+                        <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" id="phone_number" type="submit" />
                     </div>
                     <div id="kc-info-message" class="${properties.kcLabelWrapperClass!} infoText">
                         <#if client?? && client.baseUrl?has_content>
