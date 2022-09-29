@@ -50,7 +50,7 @@ public class PhoneNumberAuthenticator implements Authenticator {
         }catch (NoResultException e){
             log.error("user phoneNumber not set");
             Response challenge = context.form()
-                    .createForm("secret-question.ftl");
+                    .createForm("phone-number.ftl");
             context.challenge(challenge);
         }
 

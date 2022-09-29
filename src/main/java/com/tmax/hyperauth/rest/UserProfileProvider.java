@@ -61,13 +61,13 @@ public class UserProfileProvider implements RealmResourceProvider {
     public Response get(@HeaderParam("Authorization") String authorization,
                         @PathParam("userName")  final String userName) {
 
-//        boolean flag = isPermitted(authorization);
-//
-//        if(!flag){
-//            status = Response.Status.UNAUTHORIZED;
-//            out = "Not Permitted";
-//            return Util.setCors(status, out);
-//        }
+        boolean flag = isPermitted(authorization);
+
+        if(!flag){
+            status = Response.Status.UNAUTHORIZED;
+            out = "Not Permitted";
+            return Util.setCors(status, out);
+        }
 
 
         log.info("invoke user profile: " + userName);
